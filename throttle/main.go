@@ -12,7 +12,9 @@ func check(err error) {
 	}
 }
 
-func doWork() {
+func doWork(th *Throttle) {
+	defer th.Done(nil)
+
 	// Simulate some work.
 	time.Sleep(time.Second)
 }
@@ -27,10 +29,12 @@ func printStats() {
 func main() {
 	go printStats()
 
+	th := NewThrottle(3)
 	for i := 0; i < 100; i++ {
+		check(th.Do())
 		fmt.Printf("Processing item number = %+v\n", i)
-		go doWork()
+		go doWork(th)
 	}
 
-	time.Sleep(time.Second * 2)
+	check(th.Finish())
 }

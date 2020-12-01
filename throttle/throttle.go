@@ -2,6 +2,8 @@ package main
 
 import "sync"
 
+// Taken from https://github.com/dgraph-io/badger/blob/2d88aea98099cc021fe39a783629759c90d9e139/y/y.go#L195-L263
+
 // Throttle allows a limited number of workers to run at a time. It also
 // provides a mechanism to check for errors encountered by workers and wait for
 // them to finish.
