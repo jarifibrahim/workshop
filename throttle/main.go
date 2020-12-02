@@ -13,6 +13,7 @@ func check(err error) {
 }
 
 func doWork(th *Throttle) {
+	// Mark this job as done.
 	defer th.Done(nil)
 
 	// Simulate some work.
@@ -29,12 +30,17 @@ func printStats() {
 func main() {
 	go printStats()
 
+	// Create a new throttle variable.
 	th := NewThrottle(3)
+
 	for i := 0; i < 100; i++ {
-		check(th.Do())
+		// Gate keeper. Do not let more than 3 goroutines to start.
+		th.Do()
+
 		fmt.Printf("Processing item number = %+v\n", i)
 		go doWork(th)
 	}
 
-	check(th.Finish())
+	// Wait for all the jobs to finish.
+	th.Finish()
 }
