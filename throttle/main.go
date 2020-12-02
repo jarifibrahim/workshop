@@ -6,12 +6,6 @@ import (
 	"time"
 )
 
-func check(err error) {
-	if err != nil {
-		panic(err)
-	}
-}
-
 func doWork(th *Throttle) {
 	// Mark this job as done.
 	defer th.Done(nil)
