@@ -15,11 +15,13 @@ func doWork(cl *Closer) {
 	for {
 		select {
 		case <-cl.HasBeenClosed():
+			// Close active connection.
+			// Close open file descriptors.
 			fmt.Println("Exiting doWork. Bye Bye!")
 			return
 		default:
 			// Simulate some work.
-			time.Sleep(time.Second)
+			time.Sleep(time.Millisecond * 500)
 			fmt.Printf("Processed Items = %+v\n", i)
 			i++
 		}
@@ -29,6 +31,8 @@ func doWork(cl *Closer) {
 func main() {
 	cl := NewCloser(1)
 
+	go doWork(cl)
+
 	// Gracefully exit on CTRL+C.
 	sigCh := make(chan os.Signal)
 	signal.Notify(sigCh, os.Interrupt, syscall.SIGINT)
@@ -37,8 +41,6 @@ func main() {
 		// Signal the goroutine to stop.
 		cl.Signal()
 	}()
-
-	go doWork(cl)
 
 	// Wait for the goroutines to finish.
 	cl.Wait()

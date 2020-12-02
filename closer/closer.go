@@ -17,7 +17,7 @@ import (
 // -> Inside the goroutine, check if the closer has been closed by HasBeenClosed() function.
 // 		-> If closed, mark closer as done using closer.Done() and return from the goroutine.
 // -> To stop the goroutine, use the closer.Signal() method.
-// -> To stop and wait for the goroutine to finish, call closer.SignalAndClose() method.
+// -> To stop and wait for the goroutine to finish, call closer.SignalAndWait() method.
 type Closer struct {
 	waiting sync.WaitGroup
 
