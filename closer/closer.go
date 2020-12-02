@@ -7,10 +7,6 @@ import (
 
 // Taken from https://github.com/dgraph-io/ristretto/blob/67fef616c676b6848c3fd026d16b8f7d7ef6ae87/z/z.go#L65-L134
 
-var (
-	dummyCloserChan <-chan struct{}
-)
-
 // Closer holds the two things we need to close a goroutine and wait for it to
 // finish: a chan to tell the goroutine to shut down, and a WaitGroup with
 // which to wait for it to finish shutting down.
@@ -36,9 +32,6 @@ func (lc *Closer) AddRunning(delta int) {
 
 // Ctx can be used to get a context, which would automatically get cancelled when Signal is called.
 func (lc *Closer) Ctx() context.Context {
-	if lc == nil {
-		return context.Background()
-	}
 	return lc.ctx
 }
 
@@ -49,17 +42,11 @@ func (lc *Closer) Signal() {
 
 // HasBeenClosed gets signaled when Signal() is called.
 func (lc *Closer) HasBeenClosed() <-chan struct{} {
-	if lc == nil {
-		return dummyCloserChan
-	}
 	return lc.ctx.Done()
 }
 
 // Done calls Done() on the WaitGroup.
 func (lc *Closer) Done() {
-	if lc == nil {
-		return
-	}
 	lc.waiting.Done()
 }
 
