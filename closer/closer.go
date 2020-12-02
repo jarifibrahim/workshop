@@ -10,6 +10,14 @@ import (
 // Closer holds the two things we need to close a goroutine and wait for it to
 // finish: a chan to tell the goroutine to shut down, and a WaitGroup with
 // which to wait for it to finish shutting down.
+//
+// How to use Closer?
+// -> Create a new closer.
+// -> Pass the closer to the goroutine.
+// -> Inside the goroutine, check if the closer has been closed by HasBeenClosed() function.
+// 		-> If closed, mark closer as done using closer.Done() and return from the goroutine.
+// -> To stop the goroutine, use the closer.Signal() method.
+// -> To stop and wait for the goroutine to finish, call closer.SignalAndClose() method.
 type Closer struct {
 	waiting sync.WaitGroup
 
