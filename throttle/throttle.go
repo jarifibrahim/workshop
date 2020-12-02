@@ -7,6 +7,11 @@ import "sync"
 // Throttle allows a limited number of workers to run at a time. It also
 // provides a mechanism to check for errors encountered by workers and wait for
 // them to finish.
+//
+// How to user throttle?
+// -> Call throttle.Do before starting the goroutine.
+// -> Call throttle.Done in the goroutine.
+// -> Call throttle.Finish to wait for all routines to finish.
 type Throttle struct {
 	once      sync.Once
 	wg        sync.WaitGroup
